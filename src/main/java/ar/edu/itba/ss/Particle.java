@@ -15,9 +15,8 @@ public class Particle implements Comparable<Particle> {
     double prevAx;
     double prevAy;
     double radius;
-    Set<Particle> neighbours;
 
-    public Particle(int id, double x, double y, double mass, double radius) {
+    Particle(int id, double x, double y, double mass, double radius) {
         this.id = id;
         this.x = x;
         this.y = y;
@@ -33,4 +32,13 @@ public class Particle implements Comparable<Particle> {
     public int compareTo(Particle particle) {
         return id - particle.id;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Particle particle = (Particle) o;
+        return id == particle.id;
+    }
+
 }

@@ -8,8 +8,8 @@ class CommandLineParser {
 
     static double FPS = 1000;
     static int N = 100;
-    static double speed = 0.8; // m/s
-
+    static double desiredSpeed = 0.8; // m/s
+    static double dt = Math.pow(10, -4);
 
     private static Options createOptions(){
         Options options = new Options();
@@ -17,10 +17,11 @@ class CommandLineParser {
         options.addOption("n", "particles", true, "Number of pedestrians.");
         options.addOption("s", "desiredSpeed", true, "Desired speed of the pedestrians.");
         options.addOption("fps", "fps", true, "Time step for the animation.");
+        options.addOption("dt", "dt", true, "Time step for the integrator.");
         return options;
     }
 
-    public static void parseOptions(String[] args){
+    static void parseOptions(String[] args){
         Options options = createOptions();
         org.apache.commons.cli.CommandLineParser parser = new DefaultParser();
 
@@ -36,7 +37,10 @@ class CommandLineParser {
                 N = Integer.parseInt(cmd.getOptionValue("p"));
             }
             if (cmd.hasOption("s")) {
-                speed = Double.parseDouble(cmd.getOptionValue("s"));
+                desiredSpeed = Double.parseDouble(cmd.getOptionValue("s"));
+            }
+            if (cmd.hasOption("dt")) {
+                dt = Double.parseDouble(cmd.getOptionValue("dt"));
             }
         }catch (Exception e){
             System.out.println("Argument not recognized.");

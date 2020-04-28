@@ -1,17 +1,14 @@
 package ar.edu.itba.ss;
 
-import java.util.List;
 
-public class Beeman implements Integrator {
+import static ar.edu.itba.ss.CommandLineParser.desiredSpeed;
+import static ar.edu.itba.ss.CommandLineParser.dt;
+import static ar.edu.itba.ss.Generator.particles;
 
-    private final static double MINIMUM_RADIUS = 0.25;
-    private final static double MAXIMUM_RADIUS = 0.29;
-    private final static double MASS = 80;
+class Beeman {
+
     private final static double DOOR_LENGTH = 1.2;
     private final static double WALL_Y = 2;
-    private final static double CELL_INDEX_RADIUS = 0.6;
-
-    private double dt;
 
     private final static double ELASTIC_CONSTANT = 1.2 * Math.pow(10, 5);
     private final static double KT = 2.4 * Math.pow(10, 5);
@@ -19,14 +16,9 @@ public class Beeman implements Integrator {
     private final static double SOCIAL_DISTANCE = 0.08; // Metres
     private final static double ROOM_LENGTH = 20;
     private final static double DRIVING_TIME = 0.5;
-    private final static double desiredSpeed = 0.8;
 
 
-    public Beeman(double dt) {
-        this.dt = dt;
-    }
-
-    public void updatePosition(List<Particle> particles) {
+    static void updatePosition() {
 
         for (Particle p: particles){
            /* if (p.isWall)
@@ -45,7 +37,7 @@ public class Beeman implements Integrator {
 
     }
 
-    public void updateSpeed(List<Particle> particles){
+    static void updateSpeed(){
 
         for (Particle p : particles) {
 
@@ -69,14 +61,14 @@ public class Beeman implements Integrator {
         }
     }
 
-    private double[] getAcceleration(Particle p){
+    private static double[] getAcceleration(Particle p){
         double[] newForce = forces(p);
         newForce[0] = newForce[0] / p.mass;
         newForce[1] = newForce[1] / p.mass;
         return newForce;
     }
 
-    private double[] forces(Particle p) {
+    private static double[] forces(Particle p) {
 
         double[] force = new double[2];
 
@@ -87,10 +79,8 @@ public class Beeman implements Integrator {
         force = lateralCollision(p, force, 0);
         force = lateralCollision(p, force, ROOM_LENGTH);
 
-        for (Particle neighbour : p.neighbours) {
-
+        for (Particle neighbour : particles) {
             if (!neighbour.equals(p)){
-
                 // Social Force
                 double distance = p.getDistanceTo(neighbour);
                 double superposition = p.radius + neighbour.radius - distance;
